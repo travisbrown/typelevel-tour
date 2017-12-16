@@ -166,5 +166,6 @@ object Ex7 {
    * Implement a function that doubles the quantities in `json`, leaving the
    * rest of the document unchanged.
    */
-  def doubleQuantities: Json => Json = ???
+  def doubleQuantities: Json => Json =
+    JsonPath.root.order.items.each.quantity.int.modify(_ * 2)
 }
