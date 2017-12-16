@@ -1,5 +1,6 @@
 import cats.implicits._
 import io.circe.{ Decoder, Json }
+import io.circe.literal._
 
 object Ex1 {
   case class Coord(x: Double, y: Double)
@@ -18,8 +19,6 @@ object Ex1 {
 }
 
 object Ex2 {
-  import io.circe.literal._
-
   case class Coord(x: Double, y: Double)
   case class Polygon(coordinates: List[List[Coord]])
 
@@ -64,7 +63,6 @@ object Ex4 {
   import eu.timepit.refined.string._
 
   import io.circe.generic.extras._
-  import io.circe.literal._
   import io.circe.refined._
   import io.circe.shapes._
 
@@ -113,4 +111,38 @@ object Ex6 {
    * Implement a JSON value printer using a `Json.Folder`.
    */
   def printer(json: Json): String = ???
+}
+
+object Ex7 {
+  import io.circe.optics.JsonPath
+
+  val doc: Json = json"""
+    {
+      "order": {
+        "customer": {
+          "name": "Foo McCustomer",
+          "contactDetails": {
+            "address": "1 Fake Street, London, England",
+            "phone": "0123-456-789"
+          }
+        },
+        "items": [{
+          "id": 123,
+          "description": "banana",
+          "quantity": 1
+        }, {
+          "id": 456,
+          "description": "apple",
+         "quantity": 2
+        }],
+        "total": 123.45
+      }
+    }
+  """
+
+  /**
+   * Implement a function that doubles the quantities in `json`, leaving the
+   * rest of the document unchanged.
+   */
+  def doubleQuantities: Json => Json = ???
 }

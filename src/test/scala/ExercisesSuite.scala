@@ -80,4 +80,32 @@ class ExercisesSuite extends FunSuite with Checkers {
       io.circe.jawn.parse(Ex6.printer(json)) === Right(json)
     }
   }
+
+  test("Ex7 should pass") {
+    val expected: Json = json"""
+      {
+        "order": {
+          "customer": {
+            "name": "Foo McCustomer",
+            "contactDetails": {
+              "address": "1 Fake Street, London, England",
+              "phone": "0123-456-789"
+            }
+          },
+          "items": [{
+            "id": 123,
+            "description": "banana",
+            "quantity": 2
+          }, {
+            "id": 456,
+            "description": "apple",
+           "quantity": 4
+          }],
+          "total": 123.45
+        }
+      }
+    """
+
+    assert(Ex7.doubleQuantities(Ex7.doc) === expected)
+  }
 }
