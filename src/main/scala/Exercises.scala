@@ -78,9 +78,7 @@ object Ex4 {
    * Expand this record to include the `MAPBLKLOT` and `BLKLOT` fields and
    * enforce their length and digitness.
    */
-  type Rec =
-    FieldType["MAPBLKLOT", Refined[String, MatchesRegex["\\d\\d\\d\\d\\d\\d\\d"]]] ::
-    FieldType["BLKLOT", Refined[String, MatchesRegex["\\d\\d\\d\\d\\d\\d\\d"]]] :: HNil
+  type Rec = HNil
 
   case class Lot(props: Rec, geo: Option[Geometry])
 

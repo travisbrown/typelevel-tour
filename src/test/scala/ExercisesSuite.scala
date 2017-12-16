@@ -1,3 +1,4 @@
+import cats.instances.int._
 import io.circe.{ Decoder, Json }
 import io.circe.literal._
 import io.circe.syntax._
@@ -52,8 +53,18 @@ class ExercisesSuite extends FunSuite {
   test("Ex4 should pass") {
     import Ex4._
 
-
     assert(Decoder.decodeList(decodeLot).decodeJson(CityLots.sampleData).isRight)
+  }
+
+  test("Ex4 should pass on the streamed resource") {
+    import Ex4._
+    import io.circe.fs2.{ byteArrayParser, decoder }
+
+    val expected = 251
+    val count =
+      CityLots.streamingData.through(byteArrayParser).through(decoder(decodeLot)).foldMap(_ => 1)
+
+    assert(count.runLast.unsafeRunSync === Some(expected))
   }
 
   test("Ex5 should pass") {
