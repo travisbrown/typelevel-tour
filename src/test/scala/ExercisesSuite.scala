@@ -1,3 +1,4 @@
+import io.circe.{ Decoder, Json }
 import io.circe.literal._
 import io.circe.syntax._
 import org.scalatest.FunSuite
@@ -40,6 +41,20 @@ class ExercisesSuite extends FunSuite {
     assert(Ex2.decodePolygon.decodeJson(badJson).isLeft)
   }
 
+  test("Ex3 should pass") {
+    import Ex3._
+
+    val combined = Json.fromValues(List(CityLots.samplePolygon, CityLots.sampleMultiPolygon))
+
+    assert(Decoder.decodeList(Ex3.decodeGeometry).decodeJson(combined).isRight)
+  }
+
+  test("Ex4 should pass") {
+    import Ex4._
+
+
+    assert(Decoder.decodeList(decodeLot).decodeJson(CityLots.sampleData).isRight)
+  }
 
   test("Ex5 should pass") {
     val expected = List("ygritteygritte", "joyding", "ManceRayder7", "joydingtesting", "omgwtfwhatyes", "YesKingRobert", "NightsWatchJonS", "RebornAzorAhai", "MelisandreBurns", "mancerayder8", "WinterfellaNed", "TyrionDragon", "DanJackson415", "atornes", "kwchang", "FrostBike", "BlipQA", "QAHitman", "mrdonut", "ntakayama", "NallsyMove", "cjburrows", "iamnicksheng", "joy__ebooks", "kehli", "allenschen")
