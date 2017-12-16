@@ -107,3 +107,10 @@ object Ex5 {
   def traversal: Traversal[Json, Json] = path.json
   def values: List[Json] = traversal.getAll(Tweet.quoteTweetSample)
 }
+
+object Ex6 {
+  /**
+   * Implement a JSON value printer using a `Json.Folder`.
+   */
+  def printer(json: Json): String = ???
+}

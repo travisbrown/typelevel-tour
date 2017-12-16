@@ -2,9 +2,11 @@ import cats.instances.int._
 import io.circe.{ Decoder, Json }
 import io.circe.literal._
 import io.circe.syntax._
+import io.circe.testing.instances._
 import org.scalatest.FunSuite
+import org.scalatest.prop.Checkers
 
-class ExercisesSuite extends FunSuite {
+class ExercisesSuite extends FunSuite with Checkers {
   test("Ex1 should pass") {
     import Ex1._
 
@@ -71,5 +73,11 @@ class ExercisesSuite extends FunSuite {
     val expected = List("ygritteygritte", "joyding", "ManceRayder7", "joydingtesting", "omgwtfwhatyes", "YesKingRobert", "NightsWatchJonS", "RebornAzorAhai", "MelisandreBurns", "mancerayder8", "WinterfellaNed", "TyrionDragon", "DanJackson415", "atornes", "kwchang", "FrostBike", "BlipQA", "QAHitman", "mrdonut", "ntakayama", "NallsyMove", "cjburrows", "iamnicksheng", "joy__ebooks", "kehli", "allenschen")
 
     assert(Ex5.values === expected.map(_.asJson))
+  }
+
+  test("Ex6 should pass") {
+    check { json: Json =>
+      io.circe.jawn.parse(Ex6.printer(json)) === Right(json)
+    }
   }
 }
