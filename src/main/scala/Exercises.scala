@@ -1,3 +1,4 @@
+import cats.implicits._
 import io.circe.{ Decoder, Json }
 
 object Ex1 {
@@ -17,6 +18,8 @@ object Ex1 {
 }
 
 object Ex2 {
+  import io.circe.literal._
+
   case class Coord(x: Double, y: Double)
   case class Polygon(coordinates: List[List[Coord]])
 
@@ -28,11 +31,14 @@ object Ex2 {
   /**
    * Write a decoder for this polygon type that works with the city lots
    * examples, and doesn't allow any fields except `type` and `coordinates`.
+   * For extra credit, ensure that `type` is `Polygon`.
    */
   def decodePolygon: Decoder[Polygon] = ???
 }
 
 object Ex3 {
+  import io.circe.generic.extras._
+
   case class Coord(x: Double, y: Double)
 
   sealed trait Geometry
@@ -53,6 +59,14 @@ object Ex3 {
 
 object Ex4 {
   import shapeless._
+  import shapeless.labelled.FieldType
+  import eu.timepit.refined.api.Refined
+  import eu.timepit.refined.string._
+
+  import io.circe.generic.extras._
+  import io.circe.literal._
+  import io.circe.refined._
+  import io.circe.shapes._
 
   case class Coord(x: Double, y: Double)
 
@@ -62,11 +76,13 @@ object Ex4 {
 
   /**
    * Expand this record to include the `MAPBLKLOT` and `BLKLOT` fields and
-   * enforce their length.
+   * enforce their length and digitness.
    */
-  type Rec = HNil
+  type Rec =
+    FieldType["MAPBLKLOT", Refined[String, MatchesRegex["\\d\\d\\d\\d\\d\\d\\d"]]] ::
+    FieldType["BLKLOT", Refined[String, MatchesRegex["\\d\\d\\d\\d\\d\\d\\d"]]] :: HNil
 
-  case class Lot(tpe: String, props: Rec, geo: Option[Geometry])
+  case class Lot(props: Rec, geo: Option[Geometry])
 
   implicit val decodeCoord: Decoder[Coord] =
     Decoder[(Double, Double, Double)].map {
@@ -75,7 +91,7 @@ object Ex4 {
 
   /**
    * Write a decoder for this lot type that works with the city lots
-   * examples.
+   * examples, confirming that the type is always `Feature`.
    */
   def decodeLot: Decoder[Lot] = ???
 }
@@ -91,5 +107,5 @@ object Ex5 {
   def path: JsonTraversalPath = ???
 
   def traversal: Traversal[Json, Json] = path.json
-  val values: List[Json] = traversal.getAll(Tweet.quoteTweetSample)
+  def values: List[Json] = traversal.getAll(Tweet.quoteTweetSample)
 }
